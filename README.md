@@ -29,6 +29,14 @@ $ gll
 GitLab CI configuration is valid
 
 ```
+
+Failures will appear like so:
+```
+$ gll
+GitLab CI configuration is invalid
+(<unknown>): could not find expected ':' while scanning a simple key at line 26 column 1
+```
+
 If you need to you can specify the path:
 ```
 $ gll --path path/to/.gitlab-ci.yml 
@@ -37,8 +45,7 @@ GitLab CI configuration is valid
 ```
 
 If you choose not to set the envvars for domain and token you can pass them in as flags:
-`
-``
+```
 $ gll --path path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --token <gitlab personal token>
 GitLab CI configuration is valid
 
