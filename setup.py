@@ -5,14 +5,14 @@ with open("README.md", "r") as fh:
 
 setup(
     name='gitlab_lint',
-    version='0.1.2',
+    version='0.1.3',
     py_modules=['gitlab_lint'],
     author="Elijah Roberts",
     author_email="elijah@elijahjamesroberts.com",
     description="This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    download_url="https://github.com/elijah-roberts/gitlab_lint/archive/0.1.2.tar.gz",
+    download_url="https://github.com/elijah-roberts/gitlab_lint/archive/0.1.3.tar.gz",
     keywords=['GITLAB', 'LINT', 'GIT'],
     packages=find_packages(),
     classifiers=[
@@ -27,6 +27,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        gll=main:main
+        gll=gitlab_lint:main
     ''',
 )
