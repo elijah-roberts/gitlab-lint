@@ -12,6 +12,8 @@ setup(
     description="This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    download_url="https://github.com/elijah-roberts/gitlab_lint/archive/0.1.0.tar.gz",
+    keywords=['GITLAB', 'LINT', 'GIT'],
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
