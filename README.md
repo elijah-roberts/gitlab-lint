@@ -3,8 +3,17 @@
 This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api. This can easily be added as a pre-commit step to locally catch any issues with your configuration prior to pushing your changes.
 
 ## Installation
-```pip install gitlab_lint```
+```python3 -m pip install -U gitlab_lint```
 
+## Configuration
+You can set the following environmental variables:
+
+`GITLAB_LINT_DOMAIN` - Which allows you to override the default gitlab.com domain, and point at a local instance
+
+`GITLAB_LINT_TOKEN` - If your .gitlab-ci.yml contains any includes, you may need to set a private token to pull data from those other repos
+ 
+ I would recommend adding these to your ~/.profile or ~/.bash_profile
+ 
 ## Parameters
 
 | Flag | Description | Type | Default | Required |
@@ -14,20 +23,26 @@ This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab 
 | --path | Path to .gitlab-ci.yml, defaults to local directory | string | `.gitlab-ci.yml` | no |
 
 ## Example Usage
+If your .gitlab-ci.yml is in the current directory it is as easy as:
 ```
-$ python main.py --path examples/.gitlab-ci.yml 
+$ gll 
+GitLab CI configuration is valid
+
+```
+If you need to you can specify the path:
+```
+$ gll --path path/to/.gitlab-ci.yml 
 GitLab CI configuration is valid
 
 ```
 
-## Configuration
-You can set the following environmental variables:
+If you choose not to set the envvars for domain and token you can pass them in as flags:
+`
+``
+$ gll --path path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --token <gitlab personal token>
+GitLab CI configuration is valid
 
-`GITLAB_LINT_DOMAIN` - Which allows you to override the default gitlab.com domain, and point at a local instance
-
-`GITLAB_LINT_TOKEN` - If your .gitlab-ci.yml contains any includes, you may need to set a private token to pull data from those other repos
- 
- 
+```
  ## Development
 
 ### Bug Reports & Feature Requests
