@@ -21,6 +21,7 @@ You can set the following environmental variables:
 | --domain | Gitlab Domain. You can set envvar `GITLAB_LINT_DOMAIN` | string | `gitlab.com` | no |
 | --token | Gitlab Personal Token. You can set envvar `GITLAB_LINT_TOKEN`  | string | `None`| no |
 | --path | Path to .gitlab-ci.yml, defaults to local directory | string | `.gitlab-ci.yml` | no |
+| --verify | Enables HTTPS verification, which is disabled by default to support privately hosted instances | Flag | `False` | no |
 
 ## Example Usage
 If your .gitlab-ci.yml is in the current directory it is as easy as:
@@ -47,6 +48,15 @@ GitLab CI configuration is valid
 If you choose not to set the envvars for domain and token you can pass them in as flags:
 ```
 $ gll --path path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --token <gitlab personal token>
+GitLab CI configuration is valid
+
+```
+
+
+Https verification is disabled by default to support privately hosted instances, if you would like to enable pass the `--verify | -v` flag
+
+```
+$ gll --verify
 GitLab CI configuration is valid
 
 ```
