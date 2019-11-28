@@ -1,2 +1,3 @@
 .idea
 __pycache__/*
+gitlab_lint.egg-info/
