@@ -83,8 +83,8 @@ In general, PRs are welcome. We follow the typical trunk based development Git w
 ### pre-commit
 To use this with pre-commit.com, you can use something like
 ```yaml
--   repo: https://github.com/elijah-roberts/gitlab-lint
-    rev: master
+-   repo: https://github.com/mick352/gitlab-lint
+    rev: pre-commit-hook
     hooks:
     -   id: gitlab-ci-check
         pass_filenames: false
