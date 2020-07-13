@@ -84,7 +84,7 @@ In general, PRs are welcome. We follow the typical trunk based development Git w
 To use this with pre-commit.com, you can use something like
 ```yaml
 -   repo: https://github.com/elijah-roberts/gitlab-lint
-    rev: pre-commit-hook
+    rev: master
     hooks:
     -   id: gitlab-ci-check
         pass_filenames: false
