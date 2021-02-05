@@ -43,7 +43,6 @@ def get_validation_data(path, domain, project, token, verify):
 
     params = {'private_token': token} if token else None
     project_id = f"projects/{project}/" if project else ""
-    print(params)
 
 
     with open(path) as f:
