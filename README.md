@@ -11,14 +11,17 @@ You can set the following environmental variables:
 `GITLAB_LINT_DOMAIN` - Which allows you to override the default gitlab.com domain, and point at a local instance
 
 `GITLAB_LINT_TOKEN` - If your .gitlab-ci.yml contains any includes, you may need to set a private token to pull data from those other repos
- 
+
+`GITLAB_LINT_PROJECT` - If your .gitlab-ci.yml contains any includes which source from your local repo, you may set your project ID. If your repo is private, you must set your token as well.
+
  I would recommend adding these to your ~/.profile or ~/.bash_profile
- 
+
 ## Parameters
 
 | Flag | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | --domain | Gitlab Domain. You can set envvar `GITLAB_LINT_DOMAIN` | string | `gitlab.com` | no |
+| --project | Gitlab Project ID. You can set envvar `GITLAB_LINT_PROJECT` | string | `None` | no |
 | --token | Gitlab Personal Token. You can set envvar `GITLAB_LINT_TOKEN`  | string | `None`| no |
 | --path | Path to .gitlab-ci.yml, defaults to local directory | string | `.gitlab-ci.yml` | no |
 | --verify | Enables HTTPS verification, which is disabled by default to support privately hosted instances | Flag | `False` | no |
@@ -26,7 +29,7 @@ You can set the following environmental variables:
 ## Example Usage
 If your .gitlab-ci.yml is in the current directory it is as easy as:
 ```
-$ gll 
+$ gll
 GitLab CI configuration is valid
 
 ```
@@ -40,14 +43,14 @@ GitLab CI configuration is invalid
 
 If you need to you can specify the path:
 ```
-$ gll --path path/to/.gitlab-ci.yml 
+$ gll --path path/to/.gitlab-ci.yml
 GitLab CI configuration is valid
 
 ```
 
 If you choose not to set the envvars for domain and token you can pass them in as flags:
 ```
-$ gll --path path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --token <gitlab personal token>
+$ gll --path path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --project 1234 --token <gitlab personal token>
 GitLab CI configuration is valid
 
 ```
@@ -72,11 +75,10 @@ If you are interested in being a contributor and want to get involved in develop
 
 In general, PRs are welcome. We follow the typical trunk based development Git workflow.
 
- 1. **Branch** the repo 
+ 1. **Branch** the repo
  2. **Clone** the project to your own machine
  3. **Commit** changes to your branch
  4. **Push** your work back up to your branch
  5. Submit a **Merge/Pull Request** so that we can review your changes
 
 **NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!
-
