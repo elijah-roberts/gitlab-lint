@@ -17,3 +17,4 @@ def test_error_validation():
         generate_exit_info(data)
     assert e.type == SystemExit
     assert e.value.code == 1
+    
