@@ -80,6 +80,9 @@ In general, PRs are welcome. We follow the typical trunk based development Git w
 
 **NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!
 
+#### Tests
+Run tests in root directory with `pytest`
+
 ### pre-commit
 To use this with pre-commit.com, you can use something like
 ```yaml
