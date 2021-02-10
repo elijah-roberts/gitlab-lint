@@ -1,3 +1,7 @@
 .idea
 __pycache__/*
 gitlab_lint.egg-info/
+gitlab_lint/__pycache__/*
+venv
+.eggs
+tests/__pycache__/*
