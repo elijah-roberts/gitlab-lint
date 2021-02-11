@@ -82,3 +82,18 @@ In general, PRs are welcome. We follow the typical trunk based development Git w
  5. Submit a **Merge/Pull Request** so that we can review your changes
 
 **NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!
+
+#### Tests
+Run tests in root directory with `pytest`
+
+### pre-commit
+To use this with pre-commit.com, you can use something like
+```yaml
+-   repo: https://github.com/mick352/gitlab-lint
+    rev: pre-commit-hook
+    hooks:
+    -   id: gitlab-ci-check
+        pass_filenames: false
+        args: [-d, my.private.repo, -t, private_token]
+```
+(or remove the `args` line for gitlab.com).

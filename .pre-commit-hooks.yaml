@@ -1,0 +1,6 @@
+-   id: gitlab-ci-check
+    name: Check Gitlab CI file
+    description: This hook checks your .gitlab-ci.yml file
+    entry: gll
+    language: python
+    types: [yaml]
