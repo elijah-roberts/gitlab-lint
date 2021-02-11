@@ -94,6 +94,6 @@ To use this with pre-commit.com, you can use something like
     hooks:
     -   id: gitlab-ci-check
         pass_filenames: false
-        args: [-d, my.private.repo, -t, private_token]
+        args: [-d, my.private.repo, -r, project_id, -t, private_token]
 ```
 (or remove the `args` line for gitlab.com).

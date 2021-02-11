@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 # script to validate .gitlab-ci.yml
-# Original author Elijah Roberts
-# Modified to support project namespace
 
 import sys
 
