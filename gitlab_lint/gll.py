@@ -15,10 +15,11 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
               help="Gitlab Project ID. You can set envvar GITLAB_LINT_PROJECT")
 @click.option("--token", "-t", envvar='GITLAB_LINT_TOKEN',
               help="Gitlab Personal Token. You can set envvar GITLAB_LINT_TOKEN")
-@click.option("--path", "-p", default=".gitlab-ci.yml", help="Path to .gitlab-ci.yml, defaults to local directory",
+@click.option("--path", "-p", envvar='GITLAB_LINT_PATH', default=".gitlab-ci.yml",
+              help="Path to .gitlab-ci.yml, defaults to local directory",
               type=click.Path(exists=True, readable=True, file_okay=True))
-@click.option("--verify", "-v", default=False, is_flag=True,
-              help="Enables HTTPS verification, which is disabled by default to support privately hosted instances")
+@click.option("--verify", "-v", envvar='GITLAB_LINT_VERIFY', default=False,
+              is_flag=True, help="Enables HTTPS verification, which is disabled by default to support privately hosted instances")
 def gll(domain, project, token, path, verify):
     data = get_validation_data(path, domain, project, token, verify)
     generate_exit_info(data)
