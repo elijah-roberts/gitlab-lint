@@ -25,7 +25,6 @@ before_script:
   - source venv/bin/activate
 
 test:
-  only: [tags]
   script:
     - python setup.py test
 
