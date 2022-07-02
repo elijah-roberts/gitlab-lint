@@ -1,5 +1,7 @@
 # gitlab_lint
 
+[![Downloads](https://pepy.tech/badge/gitlab-lint)](https://pepy.tech/project/gitlab-lint)
+
 This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api. This can easily be added as a pre-commit step to locally catch any issues with your configuration prior to pushing your changes.
 
 ## Installation
