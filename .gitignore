@@ -5,3 +5,4 @@ gitlab_lint/__pycache__/*
 venv
 .eggs
 tests/__pycache__/*
+.venv

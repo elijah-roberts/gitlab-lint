@@ -13,7 +13,7 @@ setup(
     license="MIT",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    download_url="https://github.com/elijah-roberts/gitlab_lint/archive/0.2.1.tar.gz",
+    download_url="https://github.com/elijah-roberts/gitlab_lint/archive/0.3.0.tar.gz",
     keywords=['GITLAB', 'LINT', 'GIT'],
     packages=find_packages(),
     classifiers=[

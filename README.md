@@ -14,6 +14,10 @@ You can set the following environmental variables:
 
 `GITLAB_LINT_PROJECT` - If your .gitlab-ci.yml contains any includes which source from your local repo, you may set your project ID. If your repo is private, you must set your token as well.
 
+`GITLAB_LINT_PATH` - If you're linting anything other than the default `.gitlab-ci.yml` file.
+
+`GITLAB_LINT_VERIFY` - If you prefer TLS checking
+
  I would recommend adding these to your ~/.profile or ~/.bash_profile
 
 ## Parameters
@@ -23,8 +27,8 @@ You can set the following environmental variables:
 | --domain | Gitlab Domain. You can set envvar `GITLAB_LINT_DOMAIN` | string | `gitlab.com` | no |
 | --project | Gitlab Project ID. You can set envvar `GITLAB_LINT_PROJECT` | string | `None` | no |
 | --token | Gitlab Personal Token. You can set envvar `GITLAB_LINT_TOKEN`  | string | `None`| no |
-| --path | Path to .gitlab-ci.yml, defaults to local directory | string | `.gitlab-ci.yml` | no |
-| --verify | Enables HTTPS verification, which is disabled by default to support privately hosted instances | Flag | `False` | no |
+| --path | Path to .gitlab-ci.yml, defaults to local directory. You can set envvar `GITLAB_LINT_PATH` | string | `.gitlab-ci.yml` | no |
+| --verify | Enables HTTPS verification, which is disabled by default to support privately hosted instances. You can set envvar `GITLAB_LINT_VERIFY` | Flag | `False` | no |
 
 ## Example Usage
 If your .gitlab-ci.yml is in the current directory it is as easy as:
@@ -63,7 +67,7 @@ $ gll --verify
 GitLab CI configuration is valid
 
 ```
- ## Development
+## Development
 
 ### Bug Reports & Feature Requests
 
@@ -83,7 +87,12 @@ In general, PRs are welcome. We follow the typical trunk based development Git w
 
 **NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!
 
+### Virtual environments
+
+This project supports Poetry for Python virtual environments. Poetry may be installed via `pip`, and environments can be accessed with `poetry shell` or `poetry run`.
+
 #### Tests
+
 Run tests in root directory with `pytest`
 
 ### pre-commit
