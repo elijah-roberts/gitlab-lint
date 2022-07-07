@@ -1,0 +1,47 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.3.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-added-large-files
+  - id: check-toml
+  - id: detect-private-key
+  - id: mixed-line-ending
+    args: [--fix, lf]
+  - id: check-executables-have-shebangs
+  - id: check-yaml
+    args: [--allow-multiple-documents]
+
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.4.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2']
+
+- repo: https://github.com/ambv/black
+  rev: 22.6.0
+  hooks:
+  - id: black
+
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 3.9.2
+  hooks:
+  - id: flake8
+
+- repo: https://github.com/Lucas-C/pre-commit-hooks-bandit
+  rev: v1.0.6
+  hooks:
+  - id: python-bandit-vulnerability-check
+    args: [-lll, --recursive, gitlab_lint]
+
+- repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+  rev: v1.3.0
+  hooks:
+  - id: python-safety-dependencies-check
+
+- repo: https://github.com/jackdewinter/pymarkdown/
+  rev: v0.9.7
+  hooks:
+  - id: pymarkdown
+    args: [--config, .pymarkdown.json, scan]

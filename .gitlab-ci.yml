@@ -6,7 +6,7 @@ image: python:latest
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
 
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
@@ -15,27 +15,26 @@ variables:
 # them in a virtualenv and cache it as well.
 cache:
   paths:
-    - .cache/pip
-    - venv/
+  - .cache/pip
+  - venv/
 
 before_script:
-  - python -V  # Print out python version for debugging
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
+- python -V    # Print out python version for debugging
+- pip install virtualenv
+- virtualenv venv
+- source venv/bin/activate
 
 test:
   script:
-    - python setup.py test
+  - python setup.py test
 
 run:
   before_script:
-    - python3 -m pip install --user --upgrade twine
+  - python3 -m pip install --user --upgrade twine
   script:
-    - python3 setup.py sdist bdist_wheel
-    - python3 -m twine upload dist/*
+  - python3 setup.py sdist bdist_wheel
+  - python3 -m twine upload dist/*
   only: [tags]
   artifacts:
     paths:
-      - dist/*
-
+    - dist/*
