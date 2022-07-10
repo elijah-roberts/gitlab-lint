@@ -20,12 +20,15 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
               type=click.Path(exists=True, readable=True, file_okay=True))
 @click.option("--verify", "-v", envvar='GITLAB_LINT_VERIFY', default=False,
               is_flag=True, help="Enables HTTPS verification, which is disabled by default to support privately hosted instances")
-def gll(domain, project, token, path, verify):
-    data = get_validation_data(path, domain, project, token, verify)
+@click.option("--reference", "-f", envvar='GITLAB_LINT_REF',
+              help="Git reference to use for context when validating")
+def gll(domain, project, token, path, verify, reference):
+    print(path, domain, project, token, verify, reference)
+    data = get_validation_data(path, domain, project, token, verify, reference)
     generate_exit_info(data)
 
 
-def get_validation_data(path, domain, project, token, verify):
+def get_validation_data(path, domain, project, token, verify, reference):
     """
     Creates a post to gitlab ci/lint  api endpoint
     Reference: https://docs.gitlab.com/ee/api/lint.html
@@ -34,6 +37,7 @@ def get_validation_data(path, domain, project, token, verify):
     :param project: str gitlab project id. If specified, used to validate .gitlab-ci.yml file with a namespace
     :param token: str gitlab token. If your .gitlab-ci.yml file has includes you may need it to authenticate other repos
     :param verify: bool flag to enable/disable https checking. False by default to support privately hosted instances
+    :param reference: str git ref to use for validation context
     :return: data json response data from api request
     """
 
@@ -44,6 +48,9 @@ def get_validation_data(path, domain, project, token, verify):
     params = {'private_token': token} if token else None
     project_id = f"projects/{project}/" if project else ""
 
+    if reference:
+        params.update({"ref": reference})
+        params.update({"dry_run": "true"})  # Must be set or ref is ignored
 
     with open(path) as f:
         r = requests.post(f"https://{domain}/api/v4/{project_id}ci/lint", json={'content': f.read()}, params=params, verify=verify)

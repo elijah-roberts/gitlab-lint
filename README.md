@@ -20,6 +20,8 @@ You can set the following environmental variables:
 
 `GITLAB_LINT_VERIFY` - If you prefer TLS checking
 
+`GITLAB_LINT_REF` - Set the Git reference to use for validation context
+
  I would recommend adding these to your ~/.profile or ~/.bash_profile
 
 ## Parameters
@@ -31,6 +33,7 @@ You can set the following environmental variables:
 | --token | Gitlab Personal Token. You can set envvar `GITLAB_LINT_TOKEN`  | string | `None`| no |
 | --path | Path to .gitlab-ci.yml, defaults to local directory. You can set envvar `GITLAB_LINT_PATH` | string | `.gitlab-ci.yml` | no |
 | --verify | Enables HTTPS verification, which is disabled by default to support privately hosted instances. You can set envvar `GITLAB_LINT_VERIFY` | Flag | `False` | no |
+| --reference | Git ref to use for validation context. `GITLAB_LINT_REF` | string | `None` | no |
 
 ## Example Usage
 If your .gitlab-ci.yml is in the current directory it is as easy as:
