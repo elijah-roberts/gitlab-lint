@@ -1,9 +1,23 @@
 [tool.poetry]
 name = "gitlab-lint"
-version = "0.4.0"
+version = "0.5.0"
 description = "This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api"
 authors = ["Elijah Roberts <elijah@elijahjamesroberts.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/elijah-roberts/gitlab-lint"
+repository = "https://github.com/elijah-roberts/gitlab-lint"
+keywords = ["gitlab", "lint"]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Quality Assurance",
+]
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.scripts]
 gll = "gitlab_lint.gll:gll"
@@ -22,3 +36,9 @@ safety = "^2.0.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.commitizen]
+version = "0.5.0"
+version_files = [
+    "pyproject.toml:version"
+]
