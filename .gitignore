@@ -1,8 +1,8 @@
+
 .idea
-__pycache__/*
+**/__pycache__
 gitlab_lint.egg-info/
-gitlab_lint/__pycache__/*
 venv
 .eggs
-tests/__pycache__/*
 .venv
+dist/*
