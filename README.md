@@ -2,7 +2,7 @@
 
 [![Downloads](https://pepy.tech/badge/gitlab-lint)](https://pepy.tech/project/gitlab-lint)
 
-This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api.
+This is a CLI application to quickly lint `.gitlab-ci.yml` files using the GitLab api.
 This can easily be added as a pre-commit step to locally catch any issues with your configuration prior to pushing your changes.
 
 ## Installation
@@ -13,19 +13,10 @@ This can easily be added as a pre-commit step to locally catch any issues with y
 
 ### Parameters
 
-| Flag | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| --domain | Gitlab domain `GLL_DOMAIN` | string | `gitlab.com` | no |
-| --project | Gitlab project ID `GLL_PROJECT` | string | `None` | no |
-| --token | Gitlab personal access token `GLL_TOKEN` | string | `None`| no |
-| --file | Path to .gitlab-ci.yml, starts in local directory `GLL_FILE` | string | `.gitlab-ci.yml` | no |
-| --verify | Disables HTTPS verification, used to support privately hosted instances `GLL_VERIFY` | Flag | `True` | no |
-| --reference | Git reference to use for validation context `GLL_REFERENCE` | string | `None` | no |
-
-### Environment
-
+Run `gll --help` for full descriptions.
 All parameters can be set by environment variable, simply prefix the double-dash or long version with `GLL_`.
 These can be added to your ~/.profile or ~/.bash_profile for convenience.
+If options/arguments aren't set it, the application will search for GitLab CI variables instead.
 
 ## Example Usage
 
@@ -40,29 +31,29 @@ Failures will appear like so:
 
 ```bash
 $ gll
-GitLab CI configuration is invalid
-(<unknown>): could not find expected ':' while scanning a simple key at line 26 column 1
+# GitLab CI configuration is invalid
+# (<unknown>): could not find expected ':' while scanning a simple key at line 26 column 1
 ```
 
 If you need to you can specify the path:
 
 ```bash
 $ gll --file path/to/.gitlab-ci.yml
-GitLab CI configuration is valid
+# GitLab CI configuration is valid
 ```
 
 If you choose not to set the envvars for domain and token you can pass them in as flags:
 
 ```bash
 $ gll --file path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --project 1234 --token <gitlab personal token>
-GitLab CI configuration is valid
+# GitLab CI configuration is valid
 ```
 
-Https verification is enabled by default, if you wish to disable it pass the `--verify | -v` flagn:
+Https verification is enabled by default, if you wish to disable it pass the `--verify | -v` flag:
 
 ```bash
 $ gll --verify
-GitLab CI configuration is valid
+# GitLab CI configuration is valid
 ```
 
 ## Development

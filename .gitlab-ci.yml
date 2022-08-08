@@ -1,7 +1,7 @@
 # This file is a template, and might need editing before it works on your project.
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: python:latest
+image: fnndsc/python-poetry:1.1.14
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -18,22 +18,14 @@ cache:
   - .cache/pip
   - venv/
 
-before_script:
-- python -V    # Print out python version for debugging
-- pip install virtualenv
-- virtualenv venv
-- source venv/bin/activate
-
 test:
   script:
-  - python setup.py test
+  - poetry install
+  - poetry run pytest
 
 run:
-  before_script:
-  - python3 -m pip install --user --upgrade twine
   script:
-  - python3 setup.py sdist bdist_wheel
-  - python3 -m twine upload dist/*
+  - poetry publish --build
   only: [tags]
   artifacts:
     paths:

@@ -1,18 +1,18 @@
-include: "/nix_env.yml"
+include: /nix_env.yml
 
 stages:
-  - test
+- test
 
 test_nix:
   extends: .nix_env
   stage: test
   variables:
-    NIX_CMD: "nix-shell --run"
-    DAX_CFG: ".dax"
+    NIX_CMD: nix-shell --run
+    DAX_CFG: .dax
   script:
     # Enable DAX simulation mode
-    - echo "[dax.sim]" > $DAX_CFG
-    - echo "enable = true" >> $DAX_CFG
+  - echo "[dax.sim]" > $DAX_CFG
+  - echo "enable = true" >> $DAX_CFG
     # Run test commands
-    - $NIX_CMD "python3 --version; python3 -m unittest -v"
-    - $NIX_CMD "flake8 --version; flake8 --select=ATQ"
+  - $NIX_CMD "python3 --version; python3 -m unittest -v"
+  - $NIX_CMD "flake8 --version; flake8 --select=ATQ"
