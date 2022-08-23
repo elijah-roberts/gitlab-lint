@@ -1,0 +1,32 @@
+
+{
+    "name": "Container Image Development",
+    "build": {
+        "dockerfile": "Containerfile"
+        ,"context": ".."
+        ,"args": {
+            "PIP_INDEX_URL": "${localEnv:PIP_INDEX_URL}"
+            ,"ARTIFACTORY_USERNAME": "${localEnv:ARTIFACTORY_USERNAME}"
+            ,"ARTIFACTORY_PASSWORD": "${localEnv:ARTIFACTORY_PASSWORD}"
+        }
+    },
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+        ,"source=${localEnv:HOME}/.config,target=/root/.config,type=bind,consistency=cached"
+    ],
+    "extensions": [
+        "yzhang.markdown-all-in-one"
+        ,"bungcip.better-toml"
+        ,"GitLab.gitlab-workflow"
+        ,"ms-python.python"
+    ],
+    "postStartCommand": [
+        "poetry"
+        ,"install"
+    ],
+    "updateContentCommand": [
+        "pre-commit"
+        ,"install"
+        ,"--install-hooks"
+    ]
+}

@@ -8,8 +8,11 @@ import click
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
+from gitlab_lint.__init__ import __version__
+
 
 @click.command(context_settings={"auto_envvar_prefix": "GLL"})
+@click.version_option(__version__)
 @click.option("--domain", "-d", default="gitlab.com", help="Gitlab domain")
 @click.option("--project", "-p", help="Gitlab project ID")
 @click.option("--token", "-t", help="Gitlab personal access token")
