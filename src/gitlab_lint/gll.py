@@ -11,10 +11,28 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 from gitlab_lint.__init__ import __version__
 
+DEFAULT_DOMAIN = "gitlab.com"
+
+
+def validate_domain(ctx, param, value):
+    from fqdn import FQDN
+
+    domain = FQDN(value)
+    if not domain.is_valid:
+        raise click.BadParameter(f"{value} does not conform to RFC1035")
+    return value
+
 
 @click.command(context_settings={"auto_envvar_prefix": "GLL"})
 @click.version_option(__version__)
-@click.option("--domain", "-d", default="gitlab.com", help="Gitlab domain")
+# Ergonomically defaulting to GitLab.com is nice, but it can result in credential leakage
+@click.option(
+    "--domain",
+    "-d",
+    default=DEFAULT_DOMAIN,
+    help="Gitlab FQDN, no protocol or trailing slash",
+    callback=validate_domain,
+)
 @click.option("--project", "-p", help="Gitlab project ID")
 @click.option("--token", "-t", help="Gitlab personal access token")
 @click.option(
@@ -57,9 +75,9 @@ def gll(**kwargs):
         # "token": "CI_JOB_TOKEN",
         "reference": "CI_COMMIT_REF_NAME",
         "project": "CI_PROJECT_ID",
-        "domain": "CI_SERVER_HOST",
         "file": "CI_CONFIG_PATH",
     }
+
     for argument_name, environment_variable_name in argument_mapping.items():
         if not kwargs.get(argument_name) and os.environ.get(environment_variable_name):
             logger.debug(
@@ -69,6 +87,11 @@ def gll(**kwargs):
             )
             # Can't use setDefault because the key might be there with None
             kwargs[argument_name] = os.environ.get(environment_variable_name)
+
+    # Special handling for domain as it defaults to a truthy value
+    #   so can't be dealt with by argument_mapping
+    if kwargs.get("domain") == DEFAULT_DOMAIN and os.environ.get("CI_SERVER_HOST"):
+        kwargs.update("domain", os.environ.get("CI_SERVER_HOST"))
 
     # Yoink an argument we no longer need
     kwargs.pop("verbose")
