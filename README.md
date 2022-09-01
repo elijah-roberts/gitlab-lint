@@ -74,7 +74,7 @@ In general, PRs are welcome. We follow the typical trunk based development Git w
 1. **Run** the devcontainer
 1. **Make** and **test** your changes
 1. **Commit** changes to your branch using `cz bump`
-1. **Push** your work back up to your branch including tags
+1. **Push** your work back up to your branch including tags `git push --all`
 1. Submit a **Merge/Pull Request** so that we can review your changes
 
 **NOTE:** Be sure to merge the latest changes from upstream before making a pull request!
@@ -102,3 +102,12 @@ To use this with pre-commit.com, you can use something like
 ```
 
 (or remove the `args` line for gitlab.com).
+
+### TODO
+
+Look into automagic release jobs
+
+```Bash
+poetry version $(git describe --tags --abbrev=0)
+poetry build
+```

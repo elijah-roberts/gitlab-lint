@@ -12,7 +12,6 @@
     },
     "mounts": [
         "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
-        ,"source=${localEnv:HOME}/.config,target=/root/.config,type=bind,consistency=cached"
     ],
     "extensions": [
         "yzhang.markdown-all-in-one"
@@ -20,13 +19,20 @@
         ,"GitLab.gitlab-workflow"
         ,"ms-python.python"
     ],
-    "postStartCommand": [
-        "poetry"
-        ,"install"
-    ],
-    "updateContentCommand": [
-        "pre-commit"
-        ,"install"
-        ,"--install-hooks"
-    ]
+        "onCreateCommand": [
+          "poetry",
+          "install",
+          "--no-interaction"
+        ],
+        "settings": {
+          "terminal.integrated.defaultProfile.linux": "poetry",
+          "terminal.integrated.profiles.linux": {
+              "poetry": {
+                  "path": "/usr/local/bin/poetry",
+                  "args": [
+                    "shell"
+                  ]
+              },
+          }
+        }
 }

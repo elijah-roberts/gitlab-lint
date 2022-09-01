@@ -18,7 +18,9 @@ classifiers = [
 include = [
     "LICENSE",
 ]
-
+packages = [
+    { include = "gitlab_lint", from = "src" },
+]
 [tool.poetry.scripts]
 gll = "gitlab_lint.gll:gll"
 

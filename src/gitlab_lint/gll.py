@@ -3,6 +3,7 @@
 
 import sys
 import os
+import logging
 
 import click
 import requests
@@ -28,54 +29,78 @@ from gitlab_lint.__init__ import __version__
     "-i",
     default=False,
     is_flag=True,
-    help="Enables HTTPS verification, which is disabled by default to support privately hosted instances",
+    help="Disables HTTPS verification, which is enabled by default",
 )
 @click.option(
     "--reference",
     "-r",
     help="Git reference to use for validation context",
 )
-def gll(domain, project, token, file, insecure, reference):
-    if not token and os.environ.get("GITLAB_PRIVATE_TOKEN"):
-        token = os.environ.get("GITLAB_PRIVATE_TOKEN")
-    if not token and os.environ.get("CI_JOB_TOKEN"):
-        token = os.environ.get("CI_JOB_TOKEN")
-    if not reference and os.environ.get("CI_COMMIT_REF_NAME"):
-        reference = os.environ.get("CI_COMMIT_REF_NAME")
-    if not project and os.environ.get("CI_PROJECT_ID"):
-        project = os.environ.get("CI_PROJECT_ID")
-    if not domain and os.environ.get("CI_SERVER_HOST"):
-        domain = os.environ.get("CI_SERVER_HOST")
-    if not file and os.environ.get("CI_CONFIG_PATH"):
-        file = os.environ.get("CI_CONFIG_PATH")
+@click.option(
+    "--verbose",
+    "-v",
+    default=False,
+    is_flag=True,
+    help="Enable verbose logging, useful for debugging and CI systems",
+)
+def gll(**kwargs):
+    logger = logging.getLogger(__name__)
+    if kwargs.get("verbose"):
+        logging.basicConfig(level=logging.DEBUG)
+    logger.debug("Received from Click: %s", kwargs)
 
-    data = get_validation_data(file, domain, project, token, insecure, reference)
+    # Todo: Confirm CI_JOB_TOKEN has permissions to validate CIs against the API
+    #   If it can't it's misleading and should be removed
+    # GITLAB_PRIVATE_TOKEN isn't an official convention I don't think, perhaps remove it?
+    argument_mapping = {
+        "token": "GITLAB_PRIVATE_TOKEN",
+        # "token": "CI_JOB_TOKEN",
+        "reference": "CI_COMMIT_REF_NAME",
+        "project": "CI_PROJECT_ID",
+        "domain": "CI_SERVER_HOST",
+        "file": "CI_CONFIG_PATH",
+    }
+    for argument_name, environment_variable_name in argument_mapping.items():
+        if not kwargs.get(argument_name) and os.environ.get(environment_variable_name):
+            logger.debug(
+                "Set %s from environment to %s",
+                argument_name,
+                environment_variable_name,
+            )
+            # Can't use setDefault because the key might be there with None
+            kwargs[argument_name] = os.environ.get(environment_variable_name)
+
+    # Yoink an argument we no longer need
+    kwargs.pop("verbose")
+
+    # Destructure the dictionary to pass it in
+    # I would like to convert get_validation_data to be decoupled from the arguments too, eventually
+    data = get_validation_data(**kwargs)
     generate_exit_info(data)
 
 
 def get_validation_data(file, domain, project, token, insecure, reference):
+    logger = logging.getLogger(__name__)
     """
     Creates a post to gitlab ci/lint api endpoint
     Reference: https://docs.gitlab.com/ee/api/lint.html
-    :param file: str path to .gitlab-ci.yml file
-    :param domain: str gitlab endpoint defaults to gitlab.com, this can be overriden for privately hosted instances
-    :param project: str gitlab project id. If specified, used to validate .gitlab-ci.yml file with a namespace
-    :param token: str gitlab token. If your .gitlab-ci.yml file has includes you may need it to authenticate other repos
-    :param insecure: bool flag to enable/disable https checking. False by default to support privately hosted instances
-    :return: data json response data from api request
     """
-
     if insecure:
-        # mask error message for not securing https if insecure is False
+        logger.debug("Suppressing InsecureRequestWarning in urllib3")
+        # Suppress error message for not securing https if insecure is False
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
     params = {}
     if token:
+        logger.debug("Setting header 'private_token' to %s", token)
         params.update({"private_token": token})
     if reference:
+        logger.debug("Setting header 'ref' to %s", reference)
         params.update({"ref": reference})
+        logger.debug("Setting header 'dry_run' 'true'")
         params.update({"dry_run": "true"})  # Must be set or ref is ignored
     project_id = f"projects/{project}/" if project else ""
+    logger.debug("Project string set to %s", project_id)
 
     with open(file) as f:
         r = requests.post(
@@ -84,6 +109,7 @@ def get_validation_data(file, domain, project, token, insecure, reference):
             params=params,
             verify=not insecure,
         )
+        logger.debug(r)
     if r.status_code != 200:
         raise click.ClickException(
             (
@@ -100,6 +126,7 @@ def generate_exit_info(data):
     Parses response data and generates exit message and code
     :param data: json gitlab API ci/lint response data
     """
+    logger = logging.getLogger(__name__)
     valid = None
 
     # for calling the lint api
@@ -113,12 +140,13 @@ def generate_exit_info(data):
     if not valid:
         print("GitLab CI configuration is invalid")
         for e in data["errors"]:
-            print(e, file=sys.stderr)
+            logger.error(e)
         sys.exit(1)
     else:
         print("GitLab CI configuration is valid")
         sys.exit(0)
 
 
-if __name__ == "__main__":
+# Had to add the second one for Poetry's script feature to work
+if __name__ in ("__main__", "gitlab_lint.gll"):
     gll()
