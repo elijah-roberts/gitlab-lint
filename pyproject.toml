@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gitlab-lint"
-version = "0.5.2"
+version = "0.6.0"
 description = "This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api"
 authors = ["Elijah Roberts <elijah@elijahjamesroberts.com>"]
 license = "MIT"
@@ -41,8 +41,8 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.commitizen]
-version = "0.5.2"
+version = "0.6.0"
 version_files = [
     "pyproject.toml:version",
-    "gitlab_lint/__init__.py:__version__"
+    "src/gitlab_lint/__init__.py:__version__"
 ]
