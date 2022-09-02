@@ -6,9 +6,13 @@
         ,"context": ".."
         ,"args": {
             "PIP_INDEX_URL": "${localEnv:PIP_INDEX_URL}"
-            ,"ARTIFACTORY_USERNAME": "${localEnv:ARTIFACTORY_USERNAME}"
-            ,"ARTIFACTORY_PASSWORD": "${localEnv:ARTIFACTORY_PASSWORD}"
         }
+    },
+    "containerEnv": {
+        "GITLAB_PRIVATE_TOKEN": "${localEnv:GITLAB_PRIVATE_TOKEN}"
+        ,"POETRY_HTTP_BASIC_ARTIFACTORY_USERNAME": "${localEnv:ARTIFACTORY_USERNAME}"
+        ,"POETRY_HTTP_BASIC_ARTIFACTORY_PASSWORD": "${localEnv:ARTIFACTORY_PASSWORD}"
+        ,"PIP_INDEX_URL": "${localEnv:PIP_INDEX_URL}"
     },
     "mounts": [
         "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
@@ -19,11 +23,13 @@
         ,"GitLab.gitlab-workflow"
         ,"ms-python.python"
     ],
-        "onCreateCommand": [
-          "poetry",
-          "install",
-          "--no-interaction"
-        ],
+    "onCreateCommand": [
+        "poetry",
+        "install",
+        "--no-interaction",
+        "--no-cache",
+        "--quiet"
+      ],
         "settings": {
           "terminal.integrated.defaultProfile.linux": "poetry",
           "terminal.integrated.profiles.linux": {
