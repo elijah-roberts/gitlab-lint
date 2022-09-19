@@ -1,15 +1,16 @@
 
 {
-    "name": "Container Image Development",
+    "name": "gitlab-lint Package",
     "build": {
         "dockerfile": "Containerfile"
         ,"context": ".."
-        ,"args": {
-            "PIP_INDEX_URL": "${localEnv:PIP_INDEX_URL}"
-        }
+    },
+    "containerEnv": {
+        "GITLAB_PRIVATE_TOKEN": "${localEnv:GITLAB_PRIVATE_TOKEN}"
     },
     "mounts": [
         "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+        ,"source=${localEnv:HOME}/.config/pypoetry,target=/root/.config/pypoetry,type=bind,consistency=cached"
     ],
     "extensions": [
         "yzhang.markdown-all-in-one"
@@ -18,19 +19,11 @@
         ,"ms-python.python"
     ],
         "onCreateCommand": [
-          "poetry",
-          "install",
-          "--no-interaction"
+          "poetry"
+          ,"install"
+          ,"--no-interaction"
+          ,"--no-cache"
+          ,"--only-root"
+          ,"--quiet"
         ],
-        "settings": {
-          "terminal.integrated.defaultProfile.linux": "poetry",
-          "terminal.integrated.profiles.linux": {
-              "poetry": {
-                  "path": "/usr/local/bin/poetry",
-                  "args": [
-                    "shell"
-                  ]
-              },
-          }
-        }
 }
