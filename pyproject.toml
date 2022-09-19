@@ -37,6 +37,10 @@ bandit = "^1.7.4"
 safety = "^2.0.0"
 commitizen = "^2.32.2"
 
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.2.1"
+poetryup = "^0.12.0"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

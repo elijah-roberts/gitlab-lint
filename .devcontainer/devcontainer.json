@@ -1,21 +1,16 @@
 
 {
-    "name": "Container Image Development",
+    "name": "gitlab-lint Package",
     "build": {
         "dockerfile": "Containerfile"
         ,"context": ".."
-        ,"args": {
-            "PIP_INDEX_URL": "${localEnv:PIP_INDEX_URL}"
-        }
     },
     "containerEnv": {
         "GITLAB_PRIVATE_TOKEN": "${localEnv:GITLAB_PRIVATE_TOKEN}"
-        ,"POETRY_HTTP_BASIC_ARTIFACTORY_USERNAME": "${localEnv:ARTIFACTORY_USERNAME}"
-        ,"POETRY_HTTP_BASIC_ARTIFACTORY_PASSWORD": "${localEnv:ARTIFACTORY_PASSWORD}"
-        ,"PIP_INDEX_URL": "${localEnv:PIP_INDEX_URL}"
     },
     "mounts": [
         "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+        ,"source=${localEnv:HOME}/.config/pypoetry,target=/root/.config/pypoetry,type=bind,consistency=cached"
     ],
     "extensions": [
         "yzhang.markdown-all-in-one"
@@ -23,22 +18,12 @@
         ,"GitLab.gitlab-workflow"
         ,"ms-python.python"
     ],
-    "onCreateCommand": [
-        "poetry",
-        "install",
-        "--no-interaction",
-        "--no-cache",
-        "--quiet"
-      ],
-        "settings": {
-          "terminal.integrated.defaultProfile.linux": "poetry",
-          "terminal.integrated.profiles.linux": {
-              "poetry": {
-                  "path": "/usr/local/bin/poetry",
-                  "args": [
-                    "shell"
-                  ]
-              },
-          }
-        }
+        "onCreateCommand": [
+          "poetry"
+          ,"install"
+          ,"--no-interaction"
+          ,"--no-cache"
+          ,"--only-root"
+          ,"--quiet"
+        ],
 }
