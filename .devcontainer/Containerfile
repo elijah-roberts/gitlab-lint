@@ -1,9 +1,0 @@
-FROM python:3.10-bullseye AS devcontainer
-
-SHELL ["/bin/bash", "-euo", "pipefail"]
-WORKDIR /workspace
-
-COPY pyproject.toml poetry.lock ./
-RUN pip install poetry \
-    && poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-root --no-cache --sync --quiet

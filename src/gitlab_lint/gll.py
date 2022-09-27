@@ -47,7 +47,7 @@ def validate_domain(ctx, param, value):
     "-i",
     default=False,
     is_flag=True,
-    help="Disables HTTPS verification, which is enabled by default",
+    help="Suppresses TLS validity failures",
 )
 @click.option(
     "--reference",
@@ -67,17 +67,15 @@ def gll(**kwargs):
         logging.basicConfig(level=logging.DEBUG)
     logger.debug("Received from Click: %s", kwargs)
 
-    # Todo: Confirm CI_JOB_TOKEN has permissions to validate CIs against the API
-    #   If it can't it's misleading and should be removed
     # GITLAB_PRIVATE_TOKEN isn't an official convention I don't think, perhaps remove it?
+    # CI_JOB_TOKEN sadly doesn't have permissions to use the API we need
     argument_mapping = {
         "token": "GITLAB_PRIVATE_TOKEN",
-        # "token": "CI_JOB_TOKEN",
         "reference": "CI_COMMIT_REF_NAME",
         "project": "CI_PROJECT_ID",
         "file": "CI_CONFIG_PATH",
     }
-
+    # If not provided an argument but we can pull it from the Gitlab CI environment, do so
     for argument_name, environment_variable_name in argument_mapping.items():
         if not kwargs.get(argument_name) and os.environ.get(environment_variable_name):
             logger.debug(
@@ -88,7 +86,7 @@ def gll(**kwargs):
             # Can't use setDefault because the key might be there with None
             kwargs[argument_name] = os.environ.get(environment_variable_name)
 
-    # Special handling for domain as it defaults to a truthy value
+    # Special handling for domain as it defaults to a truthy value thanks to being populated by default
     #   so can't be dealt with by argument_mapping
     if kwargs.get("domain") == DEFAULT_DOMAIN and os.environ.get("CI_SERVER_HOST"):
         logger.debug(
@@ -128,22 +126,22 @@ def get_validation_data(file, domain, project, token, insecure, reference):
     project_id = f"projects/{project}/" if project else ""
     logger.debug("Project string set to %s", project_id)
 
-    with open(file) as f:
-        r = requests.post(
+    with open(file, "r") as ci_file:
+        response = requests.post(
             f"https://{domain}/api/v4/{project_id}ci/lint",
-            json={"content": f.read()},
+            json={"content": ci_file.read()},
             params=params,
             verify=not insecure,
         )
-        logger.debug(r)
-    if r.status_code != 200:
+        logger.debug(response)
+    if response.status_code != 200:
         raise click.ClickException(
             (
-                f"API endpoint returned invalid response: \n {r.text} \n"
+                f"API endpoint returned invalid response: \n {response.text} \n"
                 "confirm your `domain`, `project`, and `token` have been set correctly"
             )
         )
-    data = r.json()
+    data = response.json()
     return data
 
 
