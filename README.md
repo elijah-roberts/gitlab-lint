@@ -2,73 +2,60 @@
 
 [![Downloads](https://pepy.tech/badge/gitlab-lint)](https://pepy.tech/project/gitlab-lint)
 
-This is a CLI application to quickly lint .gitlab-ci.yml files using the gitlab api. This can easily be added as a pre-commit step to locally catch any issues with your configuration prior to pushing your changes.
+This is a CLI application to quickly lint `.gitlab-ci.yml` files using the GitLab api.
+This can easily be added as a pre-commit step to locally catch any issues with your configuration prior to pushing your changes.
 
 ## Installation
-```python3 -m pip install -U gitlab_lint```
+
+`$ python3 -m pip install -U gitlab_lint`
 
 ## Configuration
-You can set the following environmental variables:
 
-`GITLAB_LINT_DOMAIN` - Which allows you to override the default gitlab.com domain, and point at a local instance
+### Parameters
 
-`GITLAB_LINT_TOKEN` - If your .gitlab-ci.yml contains any includes, you may need to set a private token to pull data from those other repos
-
-`GITLAB_LINT_PROJECT` - If your .gitlab-ci.yml contains any includes which source from your local repo, you may set your project ID. If your repo is private, you must set your token as well.
-
-`GITLAB_LINT_PATH` - If you're linting anything other than the default `.gitlab-ci.yml` file.
-
-`GITLAB_LINT_VERIFY` - If you prefer TLS checking
-
- I would recommend adding these to your ~/.profile or ~/.bash_profile
-
-## Parameters
-
-| Flag | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| --domain | Gitlab Domain. You can set envvar `GITLAB_LINT_DOMAIN` | string | `gitlab.com` | no |
-| --project | Gitlab Project ID. You can set envvar `GITLAB_LINT_PROJECT` | string | `None` | no |
-| --token | Gitlab Personal Token. You can set envvar `GITLAB_LINT_TOKEN`  | string | `None`| no |
-| --path | Path to .gitlab-ci.yml, defaults to local directory. You can set envvar `GITLAB_LINT_PATH` | string | `.gitlab-ci.yml` | no |
-| --verify | Enables HTTPS verification, which is disabled by default to support privately hosted instances. You can set envvar `GITLAB_LINT_VERIFY` | Flag | `False` | no |
+Run `gll --help` for full descriptions.
+All parameters can be set by environment variable, simply prefix the double-dash or long version with `GLL_`.
+These can be added to your ~/.profile or ~/.bash_profile for convenience.
+If options/arguments aren't set it, the application will search for GitLab CI variables instead.
 
 ## Example Usage
+
 If your .gitlab-ci.yml is in the current directory it is as easy as:
-```
+
+```bash
 $ gll
 GitLab CI configuration is valid
-
 ```
 
 Failures will appear like so:
-```
+
+```bash
 $ gll
-GitLab CI configuration is invalid
-(<unknown>): could not find expected ':' while scanning a simple key at line 26 column 1
+# GitLab CI configuration is invalid
+# (<unknown>): could not find expected ':' while scanning a simple key at line 26 column 1
 ```
 
 If you need to you can specify the path:
-```
-$ gll --path path/to/.gitlab-ci.yml
-GitLab CI configuration is valid
 
+```bash
+$ gll --file path/to/.gitlab-ci.yml
+# GitLab CI configuration is valid
 ```
 
 If you choose not to set the envvars for domain and token you can pass them in as flags:
+
+```bash
+$ gll --file path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --project 1234 --token <gitlab personal token>
+# GitLab CI configuration is valid
 ```
-$ gll --path path/to/.gitlab-ci.yml --domain gitlab.mycompany.com --project 1234 --token <gitlab personal token>
-GitLab CI configuration is valid
 
-```
+Https verification is enabled by default, if you wish to disable it pass the `--verify | -v` flag:
 
-
-Https verification is disabled by default to support privately hosted instances, if you would like to enable pass the `--verify | -v` flag
-
-```
+```bash
 $ gll --verify
-GitLab CI configuration is valid
-
+# GitLab CI configuration is valid
 ```
+
 ## Development
 
 ### Bug Reports & Feature Requests
@@ -77,34 +64,50 @@ Please use the submit a issue to report any bugs or file feature requests.
 
 ### Developing
 
-If you are interested in being a contributor and want to get involved in developing this CLI application feel free to reach out
+<!--- pyml disable-next-line md013-->
+If you are interested in being a contributor and want to get involved in developing this CLI application feel free to reach out!
 
 In general, PRs are welcome. We follow the typical trunk based development Git workflow.
 
- 1. **Branch** the repo
- 2. **Clone** the project to your own machine
- 3. **Commit** changes to your branch
- 4. **Push** your work back up to your branch
- 5. Submit a **Merge/Pull Request** so that we can review your changes
+1. **Fork** the repo
+1. **Clone** the project to your own machine
+1. **Run** the devcontainer
+1. **Make** and **test** your changes
+1. **Commit** changes to your branch using `cz bump`
+1. **Push** your work back up to your branch including tags `git push --all`
+1. Submit a **Merge/Pull Request** so that we can review your changes
 
-**NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!
+**NOTE:** Be sure to merge the latest changes from upstream before making a pull request!
 
 ### Virtual environments
 
-This project supports Poetry for Python virtual environments. Poetry may be installed via `pip`, and environments can be accessed with `poetry shell` or `poetry run`.
+This project supports Poetry for Python virtual environments.
+Poetry may be installed via `pip`, and environments can be accessed with `poetry shell` or `poetry run`.
 
 #### Tests
 
 Run tests in root directory with `pytest`
 
 ### pre-commit
+
 To use this with pre-commit.com, you can use something like
+
 ```yaml
 -   repo: https://github.com/mick352/gitlab-lint
     rev: pre-commit-hook
     hooks:
     -   id: gitlab-ci-check
         pass_filenames: false
-        args: [-d, my.private.repo, -r, project_id, -t, private_token]
+        args: [-d, my.private.gitlab.com, -p, project_id, -t, private_token]
 ```
+
 (or remove the `args` line for gitlab.com).
+
+### TODO
+
+Look into automagic release jobs
+
+```Bash
+poetry version $(git describe --tags --abbrev=0)
+poetry build
+```
