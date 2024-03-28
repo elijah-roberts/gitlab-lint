@@ -100,8 +100,8 @@ Run tests in root directory with `pytest`
 ### pre-commit
 To use this with pre-commit.com, you can use something like
 ```yaml
--   repo: https://github.com/mick352/gitlab-lint
-    rev: pre-commit-hook
+-   repo: https://github.com/elijah-roberts/gitlab-lint.git
+    rev: 0.4.0
     hooks:
     -   id: gitlab-ci-check
         pass_filenames: false
